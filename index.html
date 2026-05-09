@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AWC Partners — Financial Advisory & GTM Strategy for early-stage ventures.">
+  <title>AWC Partners | Financial Advisory & GTM Strategy</title>
+  <link rel="icon" type="image/png" href="https://awcpartners.co/wp-content/uploads/2021/02/cropped-awc-logo-32x32.png">
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ===== ANIMATED SVG ILLUSTRATIONS ===== */
+const FinanceAnimation = () => (
+  <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 200, height: 200 }}>
+    <style>{`
+      .bar1 { animation: growBar 1.2s 0.1s ease-out forwards; }
+      .bar2 { animation: growBar 1.2s 0.3s ease-out forwards; }
+      .bar3 { animation: growBar 1.2s 0.5s ease-out forwards; }
+      .bar4 { animation: growBar 1.2s 0.7s ease-out forwards; }
+      .bar5 { animation: growBar 1.2s 0.9s ease-out forwards; }
+      .trend-line { stroke-dasharray: 300; stroke-dashoffset: 300; animation: drawLine 2s 0.8s ease-out forwards; }
+      .coin { animation: coinFloat 3s ease-in-out infinite; }
+      .coin2 { animation: coinFloat 3s 0.5s ease-in-out infinite; }
+      @keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+      @keyframes drawLine { to { stroke-dashoffset: 0; } }
+      @keyframes coinFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    `}</style>
+    <line x1="40" y1="200" x2="220" y2="200" stroke="#6b5882" strokeOpacity="0.15" strokeWidth="1" />
+    <line x1="40" y1="160" x2="220" y2="160" stroke="#6b5882" strokeOpacity="0.08" strokeWidth="1" />
+    <line x1="40" y1="120" x2="220" y2="120" stroke="#6b5882" strokeOpacity="0.08" strokeWidth="1" />
+    <line x1="40" y1="80" x2="220" y2="80" stroke="#6b5882" strokeOpacity="0.08" strokeWidth="1" />
+    <rect className="bar1" x="52" y="150" width="24" height="50" rx="4" fill="#6b5882" fillOpacity="0.15" style={{ transformOrigin: "64px 200px" }} />
+    <rect className="bar2" x="88" y="120" width="24" height="80" rx="4" fill="#6b5882" fillOpacity="0.2" style={{ transformOrigin: "100px 200px" }} />
+    <rect className="bar3" x="124" y="100" width="24" height="100" rx="4" fill="#6b5882" fillOpacity="0.25" style={{ transformOrigin: "136px 200px" }} />
+    <rect className="bar4" x="160" y="130" width="24" height="70" rx="4" fill="#9b7ea8" fillOpacity="0.3" style={{ transformOrigin: "172px 200px" }} />
+    <rect className="bar5" x="196" y="70" width="24" height="130" rx="4" fill="#9b7ea8" fillOpacity="0.35" style={{ transformOrigin: "208px 200px" }} />
+    <polyline className="trend-line" points="64,140 100,110 136,88 172,118 208,58" stroke="#d4a088" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <circle className="trend-line" cx="208" cy="58" r="4" fill="#d4a088" stroke="white" strokeWidth="2" style={{ animationDelay: "2.5s" }} />
+    <g className="coin"><circle cx="46" cy="52" r="14" fill="#d4a088" fillOpacity="0.15" stroke="#d4a088" strokeWidth="1" strokeOpacity="0.3" /><text x="46" y="57" textAnchor="middle" fontSize="14" fill="#d4a088" fontWeight="600">$</text></g>
+    <g className="coin2"><circle cx="190" cy="36" r="10" fill="#6b5882" fillOpacity="0.1" stroke="#6b5882" strokeWidth="1" strokeOpacity="0.2" /><text x="190" y="40" textAnchor="middle" fontSize="10" fill="#6b5882" fontWeight="600">$</text></g>
+  </svg>
+);
+
+const StrategyAnimation = () => (
+  <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 200, height: 200 }}>
+    <style>{`
+      .node-pulse { animation: nodePulse 2.5s ease-in-out infinite; }
+      .node-pulse2 { animation: nodePulse 2.5s 0.8s ease-in-out infinite; }
+      .node-pulse3 { animation: nodePulse 2.5s 1.6s ease-in-out infinite; }
+      .conn-draw { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawConn 1.5s 0.3s ease-out forwards; }
+      .conn-draw2 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawConn 1.5s 0.6s ease-out forwards; }
+      .conn-draw3 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawConn 1.5s 0.9s ease-out forwards; }
+      .orbit { animation: orbitSpin 8s linear infinite; transform-origin: 120px 110px; }
+      .orbit2 { animation: orbitSpin 12s linear infinite reverse; transform-origin: 120px 110px; }
+      .target-ring { animation: targetPulse 3s ease-in-out infinite; transform-origin: 120px 110px; }
+      @keyframes nodePulse { 0%,100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+      @keyframes drawConn { to { stroke-dashoffset: 0; } }
+      @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes targetPulse { 0%,100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.05); } }
+    `}</style>
+    <circle className="target-ring" cx="120" cy="110" r="90" stroke="#6b5882" strokeWidth="1" strokeOpacity="0.08" fill="none" />
+    <circle className="target-ring" cx="120" cy="110" r="65" stroke="#6b5882" strokeWidth="1" strokeOpacity="0.1" fill="none" style={{ animationDelay: "0.5s" }} />
+    <circle cx="120" cy="110" r="40" stroke="#6b5882" strokeWidth="1" strokeOpacity="0.12" fill="none" />
+    <g className="orbit"><circle cx="120" cy="20" r="5" fill="#d4a088" fillOpacity="0.4" /></g>
+    <g className="orbit2"><circle cx="30" cy="110" r="3.5" fill="#9b7ea8" fillOpacity="0.3" /></g>
+    <line className="conn-draw" x1="120" y1="110" x2="60" y2="60" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.15" />
+    <line className="conn-draw2" x1="120" y1="110" x2="185" y2="70" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.15" />
+    <line className="conn-draw3" x1="120" y1="110" x2="80" y2="175" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.15" />
+    <line className="conn-draw3" x1="120" y1="110" x2="175" y2="165" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.12" />
+    <circle cx="120" cy="110" r="16" fill="#6b5882" fillOpacity="0.12" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.3" />
+    <circle cx="120" cy="110" r="6" fill="#6b5882" fillOpacity="0.5" />
+    <g className="node-pulse" style={{ transformOrigin: "60px 60px" }}><circle cx="60" cy="60" r="11" fill="#9b7ea8" fillOpacity="0.1" stroke="#9b7ea8" strokeWidth="1.5" strokeOpacity="0.3" /><circle cx="60" cy="60" r="4" fill="#9b7ea8" fillOpacity="0.5" /></g>
+    <g className="node-pulse2" style={{ transformOrigin: "185px 70px" }}><circle cx="185" cy="70" r="11" fill="#d4a088" fillOpacity="0.1" stroke="#d4a088" strokeWidth="1.5" strokeOpacity="0.3" /><circle cx="185" cy="70" r="4" fill="#d4a088" fillOpacity="0.5" /></g>
+    <g className="node-pulse3" style={{ transformOrigin: "80px 175px" }}><circle cx="80" cy="175" r="11" fill="#6b5882" fillOpacity="0.1" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.3" /><circle cx="80" cy="175" r="4" fill="#6b5882" fillOpacity="0.5" /></g>
+    <g className="node-pulse" style={{ transformOrigin: "175px 165px" }}><circle cx="175" cy="165" r="9" fill="#d4a088" fillOpacity="0.08" stroke="#d4a088" strokeWidth="1.5" strokeOpacity="0.2" /><circle cx="175" cy="165" r="3.5" fill="#d4a088" fillOpacity="0.4" /></g>
+    <line x1="112" y1="110" x2="128" y2="110" stroke="#6b5882" strokeWidth="1" strokeOpacity="0.2" />
+    <line x1="120" y1="102" x2="120" y2="118" stroke="#6b5882" strokeWidth="1" strokeOpacity="0.2" />
+  </svg>
+);
+
+const SalesAnimation = () => (
+  <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 200, height: 200 }}>
+    <style>{`
+      .funnel-fill { animation: funnelGrow 1.5s ease-out forwards; }
+      .arrow-up { animation: arrowBounce 2s ease-in-out infinite; }
+      .dot-flow1 { animation: dotFlow 3s linear infinite; }
+      .dot-flow2 { animation: dotFlow 3s 1s linear infinite; }
+      .dot-flow3 { animation: dotFlow 3s 2s linear infinite; }
+      .meter-fill { animation: meterGrow 2s 0.5s ease-out forwards; }
+      .spark { animation: sparkle 2s ease-in-out infinite; }
+      .spark2 { animation: sparkle 2s 0.7s ease-in-out infinite; }
+      @keyframes funnelGrow { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes arrowBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+      @keyframes dotFlow { 0% { transform: translateY(-20px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(120px); opacity: 0; } }
+      @keyframes meterGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+      @keyframes sparkle { 0%,100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.3); } }
+    `}</style>
+    <path className="funnel-fill" d="M55,45 L185,45 L160,95 L155,105 L85,105 L80,95 Z" fill="#6b5882" fillOpacity="0.06" stroke="#6b5882" strokeWidth="1.5" strokeOpacity="0.15" style={{ animationDelay: "0.1s" }} />
+    <path className="funnel-fill" d="M80,108 L160,108 L145,148 L95,148 Z" fill="#9b7ea8" fillOpacity="0.08" stroke="#9b7ea8" strokeWidth="1.5" strokeOpacity="0.18" style={{ animationDelay: "0.4s" }} />
+    <path className="funnel-fill" d="M95,151 L145,151 L135,185 L105,185 Z" fill="#d4a088" fillOpacity="0.12" stroke="#d4a088" strokeWidth="1.5" strokeOpacity="0.25" style={{ animationDelay: "0.7s" }} />
+    <circle className="dot-flow1" cx="105" cy="50" r="3" fill="#6b5882" fillOpacity="0.4" />
+    <circle className="dot-flow2" cx="130" cy="50" r="3" fill="#9b7ea8" fillOpacity="0.4" />
+    <circle className="dot-flow3" cx="118" cy="50" r="3" fill="#d4a088" fillOpacity="0.4" />
+    <g className="arrow-up" style={{ transformOrigin: "120px 210px" }}><line x1="120" y1="195" x2="120" y2="215" stroke="#d4a088" strokeWidth="2" strokeOpacity="0.5" /><polyline points="113,202 120,195 127,202" stroke="#d4a088" strokeWidth="2" strokeOpacity="0.5" fill="none" strokeLinecap="round" strokeLinejoin="round" /></g>
+    <circle className="spark" cx="42" cy="70" r="3" fill="#d4a088" fillOpacity="0.3" style={{ transformOrigin: "42px 70px" }} />
+    <circle className="spark2" cx="198" cy="85" r="2.5" fill="#6b5882" fillOpacity="0.25" style={{ transformOrigin: "198px 85px" }} />
+    <circle className="spark" cx="195" cy="140" r="2" fill="#9b7ea8" fillOpacity="0.2" style={{ transformOrigin: "195px 140px", animationDelay: "1.2s" }} />
+    <rect x="30" y="160" width="50" height="4" rx="2" fill="#6b5882" fillOpacity="0.08" />
+    <rect className="meter-fill" x="30" y="160" width="35" height="4" rx="2" fill="#6b5882" fillOpacity="0.25" style={{ transformOrigin: "30px 162px" }} />
+    <rect x="30" y="172" width="50" height="4" rx="2" fill="#6b5882" fillOpacity="0.08" />
+    <rect className="meter-fill" x="30" y="172" width="45" height="4" rx="2" fill="#d4a088" fillOpacity="0.3" style={{ transformOrigin: "30px 174px", animationDelay: "0.8s" }} />
+    <rect x="160" y="160" width="50" height="4" rx="2" fill="#6b5882" fillOpacity="0.08" />
+    <rect className="meter-fill" x="160" y="160" width="42" height="4" rx="2" fill="#9b7ea8" fillOpacity="0.25" style={{ transformOrigin: "160px 162px", animationDelay: "0.6s" }} />
+  </svg>
+);
+
+const serviceAnimations = [FinanceAnimation, StrategyAnimation, SalesAnimation];
+
+/* ===== MAIN COMPONENT ===== */
+const AWCv1Updated = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
+  const [visibleSections, setVisibleSections] = useState(new Set());
+  const [currentPage, setCurrentPage] = useState("home");
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const sectionRefs = useRef([]);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setVisibleSections(new Set());
+    window.scrollTo(0, 0);
+    sectionRefs.current = [];
+  }, [currentPage]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set([...prev, entry.target.dataset.section]));
+          }
+        });
+      },
+      { threshold: [0, 0.1, 0.2, 0.3] }
+    );
+    const timer = setTimeout(() => {
+      sectionRefs.current.forEach((ref) => ref && observer.observe(ref));
+    }, 100);
+    return () => { clearTimeout(timer); observer.disconnect(); };
+  }, [currentPage]);
+
+  const isVisible = (id) => visibleSections.has(id);
+  const navigate = (page) => { setCurrentPage(page); setFormSubmitted(false); };
+
+  const engagements = [
+    { sector: "Cellular Therapeutics Development", type: "Financial Advisory", stage: "Angel+" },
+    { sector: "Cancer Diagnostics & Testing", type: "Sales & GTM", stage: "Angel" },
+    { sector: "AdTech Platform & Infrastructure", type: "Sales & GTM", stage: "Angel" },
+    { sector: "Travel & Hospitality Marketplace", type: "GTM Advisory", stage: "Angel+" },
+    { sector: "Pharma Procurement SaaS", type: "Sales & GTM", stage: "Pre-Seed" },
+    { sector: "Document Intelligence Platform", type: "Sales & Partnerships", stage: "Pre-Seed+" },
+    { sector: "Commercial Real Estate ERP", type: "Sales & GTM", stage: "Seed" },
+    { sector: "Event Intelligence Agents & SaaS", type: "Financial Advisory", stage: "Seed+" },
+    { sector: "B2B Contract Analytics", type: "Sales & Partnerships", stage: "Series A+" },
+    { sector: "Proteomics CRO & Services", type: "Financial Advisory", stage: "Series A+" },
+  ];
+
+  const services = [
+    { title: "Financial Advisory", desc: "Pro forma modeling, corporate valuation, budget forecasting, and strategic financial planning for ventures navigating critical growth inflection points.", items: ["Pro forma & corporate valuation", "Budget & planning forecasting", "Capital strategy & fundraising support", "Financial modeling & scenario analysis"] },
+    { title: "GTM Strategy", desc: "ICP discovery, product-market fit development, competitive intelligence, and market research to build your commercial foundation.", items: ["ICP discovery & validation", "Product-market fit development", "Competitive & market research", "Go-to-market playbook design"] },
+    { title: "Sales & Marketing", desc: "Outbound and inbound lead generation, commercial strategy, pricing architecture, and full-funnel revenue optimization.", items: ["Outbound + inbound lead gen", "Commercial & pricing strategy", "Sales process optimization", "Full-funnel revenue architecture"] },
+  ];
+
+  const tenets = [
+    { title: "Curated", motto: "Bespoke is better", desc: "Every engagement built from the ground up. No templates, no playbooks pulled off a shelf. We architect strategy for your specific context." },
+    { title: "Collaborative", motto: "Communication is key", desc: "Open dialogue from start to finish. We work alongside you, not above you. Your 2am Slack message? We'll probably see it by 7am." },
+    { title: "Client-Centric", motto: "Customer-obsessed", desc: "Your success and outcome define ours. That's not a tagline — it's the business model. If you don't win, we have a problem." },
+  ];
+
+  const ServiceAnim = serviceAnimations[activeTab];
+
+  return (
+    <div style={{ background: "#faf6f1", color: "#1e1a2e", fontFamily: "'Cormorant Garamond', Georgia, serif", minHeight: "100vh", overflowX: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Outfit:wght@200;300;400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+          --deep: #1e1a2e; --purple-dark: #2d2545; --purple-mid: #6b5882;
+          --purple-light: #8e7da3; --mauve: #9b7ea8; --peach: #d4a088;
+          --peach-light: #e8c5b0; --bg: #faf6f1; --text: #1e1a2e; --text-muted: #5c4a6a;
+        }
+
+        .nav-v1 { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; transition: all 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .nav-scrolled { background: rgba(250,246,241,0.92); backdrop-filter: blur(24px) saturate(140%); border-bottom: 1px solid rgba(107,88,130,0.1); }
+        .logo-v1 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 3px; color: var(--purple-mid); text-transform: uppercase; cursor: pointer; }
+        .nav-links-v1 a { color: var(--text); text-decoration: none; font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; margin-left: 40px; opacity: 0.45; transition: all 0.4s; font-weight: 300; position: relative; cursor: pointer; }
+        .nav-links-v1 a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--purple-mid); transition: width 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .nav-links-v1 a:hover { opacity: 1; }
+        .nav-links-v1 a:hover::after { width: 100%; }
+        .nav-links-v1 a.active-link { opacity: 1; }
+        .nav-links-v1 a.active-link::after { width: 100%; }
+
+        .hero-v1 { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 48px 80px; position: relative; overflow: hidden; }
+        .hero-v1::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 25% 20%, rgba(196,168,186,0.2) 0%, transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(232,197,176,0.15) 0%, transparent 45%), radial-gradient(ellipse at 50% 50%, rgba(142,125,163,0.06) 0%, transparent 60%); }
+        .hero-v1::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(107,88,130,0.18), transparent); }
+        .hero-overline { font-family: 'Outfit', sans-serif; font-size: 12px; letter-spacing: 6px; text-transform: uppercase; color: var(--peach); margin-bottom: 40px; font-weight: 400; opacity: 0; animation: fadeUp 1s 0.3s forwards; }
+        .hero-title-v1 { font-size: clamp(48px,8vw,120px); font-weight: 300; line-height: 1.05; max-width: 900px; margin-bottom: 32px; letter-spacing: -1px; color: var(--deep); opacity: 0; animation: fadeUp 1s 0.6s forwards; }
+        .hero-title-v1 em { font-style: italic; color: var(--purple-mid); }
+        .hero-sub-v1 { font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 300; max-width: 520px; line-height: 1.7; color: var(--text-muted); opacity: 0; animation: fadeUp 1s 0.9s forwards; }
+        .hero-cta-v1 { margin-top: 56px; opacity: 0; animation: fadeUp 1s 1.2s forwards; }
+
+        .btn-primary-v1 { font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; padding: 16px 40px; cursor: pointer; font-weight: 400; position: relative; overflow: hidden; border: 1px solid var(--purple-mid); background: transparent; color: var(--purple-mid); transition: all 0.5s cubic-bezier(0.16,1,0.3,1); }
+        .btn-primary-v1::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--purple-mid), var(--mauve)); transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); z-index: 0; }
+        .btn-primary-v1:hover::before { transform: translateY(0); }
+        .btn-primary-v1:hover { color: white; border-color: var(--purple-mid); }
+        .btn-primary-v1 span { position: relative; z-index: 1; }
+
+        .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); opacity: 0; animation: fadeUp 1s 1.6s forwards; }
+        .scroll-arrow { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--purple-light), transparent); animation: pulse-down 2s ease-in-out infinite; }
+
+        .section-v1 { padding: 120px 48px; position: relative; }
+        .section-animate { opacity: 0; transform: translateY(60px); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+        .section-animate.visible { opacity: 1; transform: translateY(0); }
+        .section-label { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--peach); margin-bottom: 16px; font-weight: 400; }
+        .section-title-v1 { font-size: clamp(32px,4vw,56px); font-weight: 300; line-height: 1.15; margin-bottom: 20px; max-width: 700px; color: var(--deep); }
+        .section-desc { font-family: 'Outfit', sans-serif; font-size: 17px; color: var(--text-muted); max-width: 560px; line-height: 1.7; margin-bottom: 56px; font-weight: 300; opacity: 0.7; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 48px; padding: 80px 48px; border-top: 1px solid rgba(107,88,130,0.1); border-bottom: 1px solid rgba(107,88,130,0.1); }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: clamp(40px,5vw,64px); font-weight: 300; line-height: 1; margin-bottom: 12px; background: linear-gradient(135deg, var(--purple-mid), var(--peach)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); opacity: 0.5; font-weight: 300; }
+
+        .services-tabs { display: flex; gap: 4px; padding: 4px; border: 1px solid rgba(107,88,130,0.12); border-radius: 14px; width: fit-content; margin-bottom: 48px; background: rgba(255,255,255,0.5); }
+        .services-tab { padding: 12px 28px; border-radius: 10px; border: none; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 400; cursor: pointer; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); color: var(--text-muted); background: transparent; letter-spacing: 0.5px; }
+        .services-tab.active { background: white; color: var(--purple-dark); box-shadow: 0 2px 12px rgba(107,88,130,0.1); }
+        .services-tab:hover:not(.active) { color: var(--deep); }
+        .service-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; animation: fadeSwitch 0.5s ease; }
+        .service-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; margin-bottom: 20px; letter-spacing: -0.5px; color: var(--deep); }
+        .service-info p { font-family: 'Outfit', sans-serif; font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 36px; font-weight: 300; }
+        .service-items { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+        .service-items li { display: flex; align-items: center; gap: 14px; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 400; color: var(--purple-dark); opacity: 0; animation: staggerIn 0.4s forwards; }
+        .service-items li .check { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, rgba(107,88,130,0.15), rgba(196,168,186,0.1)); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--purple-mid); flex-shrink: 0; }
+        .service-visual { border-radius: 20px; padding: 56px; border: 1px solid rgba(107,88,130,0.08); background: linear-gradient(135deg, rgba(196,168,186,0.08), rgba(232,197,176,0.06)); position: relative; overflow: hidden; min-height: 340px; display: flex; align-items: center; justify-content: center; }
+        .service-visual::before { content: ''; position: absolute; top: -40%; right: -30%; width: 70%; height: 70%; border-radius: 50%; background: radial-gradient(circle, rgba(232,197,176,0.12), transparent 70%); filter: blur(40px); }
+        .service-visual-num { font-size: 140px; opacity: 0.04; font-weight: 300; color: var(--purple-mid); position: absolute; bottom: -20px; right: 20px; line-height: 1; }
+
+        .ticker-viewport { height: 420px; overflow: hidden; position: relative; }
+        .ticker-viewport::before, .ticker-viewport::after { content: ''; position: absolute; left: 0; right: 0; height: 80px; z-index: 2; pointer-events: none; }
+        .ticker-viewport::before { top: 0; background: linear-gradient(to bottom, var(--bg), transparent); }
+        .ticker-viewport::after { bottom: 0; background: linear-gradient(to top, var(--bg), transparent); }
+        .ticker-track { display: flex; flex-direction: column; animation: tickerScroll 28s linear infinite; }
+        .ticker-viewport:hover .ticker-track { animation-play-state: paused; }
+        .ticker-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 24px; padding: 20px 0; align-items: center; border-bottom: 1px solid rgba(107,88,130,0.07); transition: all 0.4s cubic-bezier(0.16,1,0.3,1); cursor: default; }
+        .ticker-row:hover { background: linear-gradient(90deg, rgba(196,168,186,0.1), transparent); padding-left: 12px; }
+        .ticker-sector { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--deep); }
+        .ticker-type { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 300; color: var(--text-muted); opacity: 0.5; }
+        .ticker-stage { font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; text-align: right; min-width: 80px; background: linear-gradient(135deg, var(--purple-mid), var(--peach)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .flip-cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; perspective: 1200px; }
+        .flip-card-wrapper { height: 340px; cursor: pointer; }
+        .flip-card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+        .flip-card-wrapper:hover .flip-card { transform: rotateY(180deg); }
+        .flip-card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; padding: 48px 36px; display: flex; flex-direction: column; }
+        .flip-card-front { background: white; border: 1px solid rgba(107,88,130,0.08); box-shadow: 0 2px 16px rgba(107,88,130,0.06); justify-content: space-between; }
+        .flip-card-front::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--purple-mid), var(--peach)); border-radius: 20px 20px 0 0; opacity: 0; transition: opacity 0.4s; }
+        .flip-card-wrapper:hover .flip-card-front::before { opacity: 1; }
+        .flip-card-back { background: linear-gradient(160deg, var(--purple-dark), var(--deep)); color: #f0ebe4; transform: rotateY(180deg); justify-content: center; border: 1px solid rgba(107,88,130,0.2); }
+        .flip-front-icon { font-size: 32px; color: var(--purple-mid); margin-bottom: 24px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(107,88,130,0.12); border-radius: 14px; background: rgba(107,88,130,0.04); }
+        .flip-front-title { font-size: 32px; font-weight: 400; margin-bottom: 8px; color: var(--deep); }
+        .flip-front-motto { font-family: 'Outfit', sans-serif; font-size: 14px; color: var(--peach); font-weight: 300; font-style: italic; }
+        .flip-front-hint { font-family: 'Outfit', sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.2; margin-top: auto; color: var(--text-muted); }
+        .flip-back-motto { font-family: 'Outfit', sans-serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--peach-light); margin-bottom: 20px; font-weight: 400; }
+        .flip-back-desc { font-family: 'Outfit', sans-serif; font-size: 16px; line-height: 1.8; opacity: 0.8; font-weight: 300; }
+
+        .cta-section { text-align: center; padding: 160px 48px; position: relative; overflow: hidden; }
+        .cta-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(107,88,130,0.15), transparent); }
+        .cta-section::after { content: ''; position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(196,168,186,0.12) 0%, transparent 60%); filter: blur(80px); border-radius: 50%; }
+
+        .page-header { padding: 160px 48px 80px; position: relative; overflow: hidden; }
+        .page-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 30%, rgba(196,168,186,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(232,197,176,0.1) 0%, transparent 45%); }
+        .page-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(107,88,130,0.15), transparent); }
+        .page-header-content { position: relative; z-index: 1; }
+        .page-header .section-title-v1 { font-size: clamp(40px,6vw,80px); margin-bottom: 16px; opacity: 0; animation: fadeUp 1s 0.2s forwards; }
+        .page-header .section-desc { opacity: 0; animation: fadeUp 1s 0.5s forwards; }
+
+        .contact-page { padding: 160px 48px 120px; max-width: 720px; margin: 0 auto; }
+        .contact-form { display: flex; flex-direction: column; gap: 24px; margin-top: 48px; }
+        .form-field { display: flex; flex-direction: column; gap: 8px; }
+        .form-field label { font-family: 'Outfit', sans-serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); font-weight: 400; }
+        .form-field input, .form-field textarea { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 300; padding: 16px 20px; border: 1px solid rgba(107,88,130,0.12); border-radius: 12px; background: white; color: var(--deep); outline: none; transition: all 0.3s; resize: vertical; }
+        .form-field input:focus, .form-field textarea:focus { border-color: var(--purple-mid); box-shadow: 0 0 0 3px rgba(107,88,130,0.08); }
+        .form-field textarea { min-height: 160px; }
+        .form-success { text-align: center; padding: 60px 0; }
+        .form-success h3 { font-size: 36px; font-weight: 400; color: var(--deep); margin-bottom: 16px; }
+        .form-success p { font-family: 'Outfit', sans-serif; font-size: 16px; color: var(--text-muted); font-weight: 300; line-height: 1.7; }
+
+        .footer-v1 { padding: 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(107,88,130,0.08); font-family: 'Outfit', sans-serif; font-size: 13px; color: var(--text-muted); opacity: 0.4; font-weight: 300; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeSwitch { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes staggerIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes tickerScroll { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+        @keyframes pulse-down { 0%,100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 0.8; transform: scaleY(1.2); transform-origin: top; } }
+
+        @media (max-width: 768px) {
+          .nav-v1 { padding: 20px 24px; }
+          .nav-links-v1 { display: none; }
+          .hero-v1 { padding: 120px 24px 80px; }
+          .section-v1 { padding: 80px 24px; }
+          .stats-row { grid-template-columns: repeat(2,1fr); gap: 32px; padding: 48px 24px; }
+          .services-tabs { flex-wrap: wrap; }
+          .service-detail { grid-template-columns: 1fr; }
+          .service-visual { min-height: 200px; }
+          .ticker-viewport { height: 320px; }
+          .ticker-type { display: none; }
+          .ticker-row { grid-template-columns: 1fr auto; }
+          .flip-cards-grid { grid-template-columns: 1fr; }
+          .flip-card-wrapper { height: 280px; }
+          .cta-section { padding: 100px 24px; }
+          .contact-page { padding: 140px 24px 80px; }
+          .page-header { padding: 140px 24px 60px; }
+          .footer-v1 { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+        }
+      `}</style>
+
+      {/* NAV */}
+      <nav className={`nav-v1 ${scrollY > 80 ? "nav-scrolled" : ""}`}>
+        <div className="logo-v1" onClick={() => navigate("home")}>AWC Partners</div>
+        <div className="nav-links-v1">
+          <a onClick={() => navigate("home")} className={currentPage === "home" ? "active-link" : ""}>Home</a>
+          <a onClick={() => navigate("services")} className={currentPage === "services" ? "active-link" : ""}>Services</a>
+          <a onClick={() => navigate("experience")} className={currentPage === "experience" ? "active-link" : ""}>Experience</a>
+          <a onClick={() => navigate("contact")} className={currentPage === "contact" ? "active-link" : ""}>Contact</a>
+        </div>
+      </nav>
+
+      {/* ===== HOME ===== */}
+      {currentPage === "home" && (<>
+        <section className="hero-v1">
+          <div className="hero-overline">Financial Advisory & GTM Strategy</div>
+          <h1 className="hero-title-v1">Accelerate<br />Your <em>Growth</em></h1>
+          <p className="hero-sub-v1">Strategic advisory for early-stage ventures navigating the space between ambition and execution.</p>
+          <div className="hero-cta-v1"><button className="btn-primary-v1" onClick={() => navigate("contact")}><span>Start a Conversation</span></button></div>
+          <div className="scroll-indicator"><div className="scroll-arrow" /></div>
+        </section>
+
+        <div ref={(el) => (sectionRefs.current[0] = el)} data-section="stats" style={{ opacity: isVisible("stats") ? 1 : 0, transform: isVisible("stats") ? "translateY(0)" : "translateY(60px)", transition: "all 1s cubic-bezier(0.16,1,0.3,1)" }}>
+          <div className="stats-row">
+            {[{ num: "20+", label: "Engagements" }, { num: "2020", label: "Established" }, { num: "3", label: "Core Practices" }].map((s, i) => (
+              <div key={i} className="stat-item" style={{ opacity: isVisible("stats") ? 1 : 0, transform: isVisible("stats") ? "translateY(0)" : "translateY(30px)", transition: `all 0.8s ${0.15*i}s cubic-bezier(0.16,1,0.3,1)` }}>
+                <div className="stat-number">{s.num}</div><div className="stat-label">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <section ref={(el) => (sectionRefs.current[1] = el)} data-section="services" className={`section-v1 section-animate ${isVisible("services") ? "visible" : ""}`}>
+          <div className="section-label">What We Do</div>
+          <h2 className="section-title-v1">Built for founders who think in quarters, not decades.</h2>
+          <p className="section-desc">We don't do everything — we do what matters. Each practice unlocks a specific growth lever for your business.</p>
+          <div className="services-tabs">{services.map((s, i) => (<button key={i} className={`services-tab ${activeTab === i ? "active" : ""}`} onClick={() => setActiveTab(i)}>{s.title}</button>))}</div>
+          <div className="service-detail" key={activeTab}>
+            <div className="service-info">
+              <h3>{services[activeTab].title}</h3><p>{services[activeTab].desc}</p>
+              <ul className="service-items">{services[activeTab].items.map((item, i) => (<li key={i} style={{ animationDelay: `${i*0.1}s` }}><span className="check">✓</span>{item}</li>))}</ul>
+            </div>
+            <div className="service-visual"><div className="service-visual-num">{String(activeTab+1).padStart(2,"0")}</div><ServiceAnim /></div>
+          </div>
+        </section>
+
+        <section ref={(el) => (sectionRefs.current[2] = el)} data-section="experience" className={`section-v1 section-animate ${isVisible("experience") ? "visible" : ""}`}>
+          <div className="section-label">Track Record</div>
+          <h2 className="section-title-v1">Select engagements across stage and sector.</h2>
+          <p className="section-desc">From angel-stage biotech to Series A+ enterprise SaaS — we've been in the room where it happens.</p>
+          <div className="ticker-viewport"><div className="ticker-track">{[...engagements, ...engagements].map((e, i) => (<div key={i} className="ticker-row"><div className="ticker-sector">{e.sector}</div><div className="ticker-type">{e.type}</div><div className="ticker-stage">{e.stage}</div></div>))}</div></div>
+        </section>
+
+        <section ref={(el) => (sectionRefs.current[3] = el)} data-section="cta" className={`cta-section section-animate ${isVisible("cta") ? "visible" : ""}`}>
+          <div className="section-label" style={{ marginBottom: 32 }}>Get in Touch</div>
+          <h2 style={{ fontSize: "clamp(36px,5vw,64px)", fontWeight: 300, marginBottom: 24, lineHeight: 1.15, position: "relative", zIndex: 1, color: "var(--deep)" }}>Let's build something<br /><em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>worth talking about.</em></h2>
+          <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 16, fontWeight: 300, maxWidth: 480, margin: "0 auto 48px", color: "var(--text-muted)", lineHeight: 1.7, position: "relative", zIndex: 1 }}>Whether you're raising, scaling, or rethinking your go-to-market — the conversation starts here.</p>
+          <button className="btn-primary-v1" style={{ position: "relative", zIndex: 1 }} onClick={() => navigate("contact")}><span>Start a Conversation</span></button>
+        </section>
+      </>)}
+
+      {/* ===== SERVICES PAGE ===== */}
+      {currentPage === "services" && (<>
+        <div className="page-header"><div className="page-header-content">
+          <div className="section-label">Services</div>
+          <h1 className="section-title-v1">What we do &<br />how we <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>do it.</em></h1>
+          <p className="section-desc" style={{ opacity: 1 }}>Three practices, three principles. Everything we bring to the table.</p>
+        </div></div>
+
+        <section ref={(el) => (sectionRefs.current[0] = el)} data-section="svc" className={`section-v1 section-animate ${isVisible("svc") ? "visible" : ""}`} style={{ paddingTop: 40 }}>
+          <div className="services-tabs">{services.map((s, i) => (<button key={i} className={`services-tab ${activeTab === i ? "active" : ""}`} onClick={() => setActiveTab(i)}>{s.title}</button>))}</div>
+          <div className="service-detail" key={activeTab}>
+            <div className="service-info"><h3>{services[activeTab].title}</h3><p>{services[activeTab].desc}</p>
+              <ul className="service-items">{services[activeTab].items.map((item, i) => (<li key={i} style={{ animationDelay: `${i*0.1}s` }}><span className="check">✓</span>{item}</li>))}</ul>
+            </div>
+            <div className="service-visual"><div className="service-visual-num">{String(activeTab+1).padStart(2,"0")}</div><ServiceAnim /></div>
+          </div>
+        </section>
+
+        <section ref={(el) => (sectionRefs.current[1] = el)} data-section="princ" className={`section-v1 section-animate ${isVisible("princ") ? "visible" : ""}`}>
+          <div className="section-label">Our Principles</div>
+          <h2 className="section-title-v1">How we work.</h2>
+          <p className="section-desc">Three commitments we make to every founder we work with. Hover to see what they actually mean.</p>
+          <div className="flip-cards-grid">{tenets.map((t, i) => (
+            <div key={i} className="flip-card-wrapper" style={{ opacity: isVisible("princ") ? 1 : 0, transform: isVisible("princ") ? "translateY(0)" : "translateY(40px)", transition: `all 0.8s ${0.2*i}s cubic-bezier(0.16,1,0.3,1)` }}>
+              <div className="flip-card">
+                <div className="flip-card-face flip-card-front"><div><div className="flip-front-icon">{i===0?"◆":i===1?"◇":"○"}</div><div className="flip-front-title">{t.title}</div><div className="flip-front-motto">{t.motto}</div></div><div className="flip-front-hint">Hover to explore →</div></div>
+                <div className="flip-card-face flip-card-back"><div className="flip-back-motto">{t.title}</div><div className="flip-back-desc">{t.desc}</div></div>
+              </div>
+            </div>
+          ))}</div>
+        </section>
+      </>)}
+
+      {/* ===== EXPERIENCE PAGE ===== */}
+      {currentPage === "experience" && (<>
+        <div className="page-header"><div className="page-header-content">
+          <div className="section-label">Track Record</div>
+          <h1 className="section-title-v1">Where we've <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>been.</em></h1>
+          <p className="section-desc" style={{ opacity: 1 }}>Select engagements across stage and sector — from angel-stage biotech to Series A+ enterprise SaaS.</p>
+        </div></div>
+
+        <section ref={(el) => (sectionRefs.current[0] = el)} data-section="exp" className={`section-v1 section-animate ${isVisible("exp") ? "visible" : ""}`} style={{ paddingTop: 40 }}>
+          <div className="ticker-viewport" style={{ height: 520 }}><div className="ticker-track">{[...engagements, ...engagements].map((e, i) => (<div key={i} className="ticker-row"><div className="ticker-sector">{e.sector}</div><div className="ticker-type">{e.type}</div><div className="ticker-stage">{e.stage}</div></div>))}</div></div>
+        </section>
+
+        <section ref={(el) => (sectionRefs.current[1] = el)} data-section="expcta" className={`cta-section section-animate ${isVisible("expcta") ? "visible" : ""}`}>
+          <div className="section-label" style={{ marginBottom: 32 }}>Interested?</div>
+          <h2 style={{ fontSize: "clamp(32px,4vw,52px)", fontWeight: 300, marginBottom: 24, lineHeight: 1.15, position: "relative", zIndex: 1, color: "var(--deep)" }}>Let's see if there's <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>a fit.</em></h2>
+          <button className="btn-primary-v1" style={{ position: "relative", zIndex: 1 }} onClick={() => navigate("contact")}><span>Start a Conversation</span></button>
+        </section>
+      </>)}
+
+      {/* ===== CONTACT PAGE ===== */}
+      {currentPage === "contact" && (
+        <div className="contact-page">
+          <div className="section-label" style={{ opacity: 0, animation: "fadeUp 1s 0.2s forwards" }}>Get in Touch</div>
+          <h1 className="section-title-v1" style={{ fontSize: "clamp(40px,6vw,72px)", opacity: 0, animation: "fadeUp 1s 0.3s forwards" }}>Have an idea?<br /><em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>Share your thoughts.</em></h1>
+          <p className="section-desc" style={{ opacity: 0, animation: "fadeUp 1s 0.5s forwards" }}>Whether you're exploring advisory, looking for GTM support, or just want to connect — we'd love to hear from you.</p>
+
+          {!formSubmitted ? (
+            <div className="contact-form" style={{ opacity: 0, animation: "fadeUp 1s 0.7s forwards" }}>
+              <div className="form-field"><label>Name</label><input type="text" placeholder="Your name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} /></div>
+              <div className="form-field"><label>Email</label><input type="email" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} /></div>
+              <div className="form-field"><label>Message</label><textarea placeholder="Tell us about your venture, what you're working on, or how we can help..." value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} /></div>
+              <button className="btn-primary-v1" style={{ alignSelf: "flex-start", marginTop: 8 }} onClick={() => { if (formData.name && formData.email && formData.message) setFormSubmitted(true); }}><span>Send Message</span></button>
+            </div>
+          ) : (
+            <div className="form-success" style={{ opacity: 0, animation: "fadeUp 1s 0.2s forwards" }}>
+              <h3>Thank you ✨</h3>
+              <p>We've received your message and will be in touch shortly.</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <footer className="footer-v1">
+        <span>© 2026 AWC Partners</span><span>New York</span><span>awcpartners.co</span>
+      </footer>
+    </div>
+  );
+};
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AWCv1Updated />);
+  </script>
+</body>
+</html>
