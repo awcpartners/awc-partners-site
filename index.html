@@ -368,7 +368,7 @@ const AWCv1Updated = () => {
 
         <section ref={(el) => (sectionRefs.current[1] = el)} data-section="services" className={`section-v1 section-animate ${isVisible("services") ? "visible" : ""}`}>
           <div className="section-label">What We Do</div>
-          <h2 className="section-title-v1">We operate at the intersection of finance x tech - for foudners, by founders</h2>
+          <h2 className="section-title-v1">For founders wearing one too many hats</h2>
           <p className="section-desc">Each practice unlocks a specific growth lever for your business, creating and transforming strategic initiatives into revenue.</p>
           <div className="services-tabs">{services.map((s, i) => (<button key={i} className={`services-tab ${activeTab === i ? "active" : ""}`} onClick={() => setActiveTab(i)}>{s.title}</button>))}</div>
           <div className="service-detail" key={activeTab}>
