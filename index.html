@@ -382,14 +382,14 @@ const AWCv1Updated = () => {
 
         <section ref={(el) => (sectionRefs.current[2] = el)} data-section="experience" className={`section-v1 section-animate ${isVisible("experience") ? "visible" : ""}`}>
           <div className="section-label">Track Record</div>
-          <h2 className="section-title-v1">Select engagements across stage and sector.</h2>
+          <h2 className="section-title-v1">Select engagements across stage and sector</h2>
           <p className="section-desc">From Pre-seed AI to Series A+ Enterprise SaaS — we've been in the rooms where it happens.</p>
           <div className="ticker-viewport"><div className="ticker-track">{[...engagements, ...engagements].map((e, i) => (<div key={i} className="ticker-row"><div className="ticker-sector">{e.sector}</div><div className="ticker-type">{e.type}</div><div className="ticker-stage">{e.stage}</div></div>))}</div></div>
         </section>
 
         <section ref={(el) => (sectionRefs.current[3] = el)} data-section="cta" className={`cta-section section-animate ${isVisible("cta") ? "visible" : ""}`}>
           <div className="section-label" style={{ marginBottom: 32 }}>Get in Touch</div>
-          <h2 style={{ fontSize: "clamp(36px,5vw,64px)", fontWeight: 300, marginBottom: 24, lineHeight: 1.15, position: "relative", zIndex: 1, color: "var(--deep)" }}>Let's build something<br /><em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>worth talking about.</em></h2>
+          <h2 style={{ fontSize: "clamp(36px,5vw,64px)", fontWeight: 300, marginBottom: 24, lineHeight: 1.15, position: "relative", zIndex: 1, color: "var(--deep)" }}>Let's build something<br /><em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>worth talking about</em></h2>
           <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: 16, fontWeight: 300, maxWidth: 480, margin: "0 auto 48px", color: "var(--text-muted)", lineHeight: 1.7, position: "relative", zIndex: 1 }}>Whether you're raising, scaling, or rethinking your go-to-market — the conversation starts here.</p>
           <button className="btn-primary-v1" style={{ position: "relative", zIndex: 1 }} onClick={() => navigate("contact")}><span>Start a Conversation</span></button>
         </section>
@@ -399,7 +399,7 @@ const AWCv1Updated = () => {
       {currentPage === "services" && (<>
         <div className="page-header"><div className="page-header-content">
           <div className="section-label">Services</div>
-          <h1 className="section-title-v1">What we do &<br />how we <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>do it.</em></h1>
+          <h1 className="section-title-v1">What we do &<br />how we <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>do it</em></h1>
           <p className="section-desc" style={{ opacity: 1 }}>Three practices, three principles. Everything we bring to the table.</p>
         </div></div>
 
@@ -415,7 +415,7 @@ const AWCv1Updated = () => {
 
         <section ref={(el) => (sectionRefs.current[1] = el)} data-section="princ" className={`section-v1 section-animate ${isVisible("princ") ? "visible" : ""}`}>
           <div className="section-label">Our Principles</div>
-          <h2 className="section-title-v1">How we work.</h2>
+          <h2 className="section-title-v1">How we work</h2>
           <p className="section-desc">Three commitments we make to every founder we work with. Hover to see what they actually mean.</p>
           <div className="flip-cards-grid">{tenets.map((t, i) => (
             <div key={i} className="flip-card-wrapper" style={{ opacity: isVisible("princ") ? 1 : 0, transform: isVisible("princ") ? "translateY(0)" : "translateY(40px)", transition: `all 0.8s ${0.2*i}s cubic-bezier(0.16,1,0.3,1)` }}>
@@ -432,7 +432,7 @@ const AWCv1Updated = () => {
       {currentPage === "experience" && (<>
         <div className="page-header"><div className="page-header-content">
           <div className="section-label">Track Record</div>
-          <h1 className="section-title-v1">Where we've <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>been.</em></h1>
+          <h1 className="section-title-v1">Where we've <em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>been</em></h1>
           <p className="section-desc" style={{ opacity: 1 }}>Select engagements across stage and sector.</p>
         </div></div>
 
@@ -451,7 +451,7 @@ const AWCv1Updated = () => {
       {currentPage === "contact" && (
         <div className="contact-page">
           <div className="section-label" style={{ opacity: 0, animation: "fadeUp 1s 0.2s forwards" }}>Get in Touch</div>
-          <h1 className="section-title-v1" style={{ fontSize: "clamp(40px,6vw,72px)", opacity: 0, animation: "fadeUp 1s 0.3s forwards" }}>Have an idea?<br /><em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>Share your thoughts.</em></h1>
+          <h1 className="section-title-v1" style={{ fontSize: "clamp(40px,6vw,72px)", opacity: 0, animation: "fadeUp 1s 0.3s forwards" }}>Have an idea?<br /><em style={{ color: "var(--purple-mid)", fontStyle: "italic" }}>Share your thoughts</em></h1>
           <p className="section-desc" style={{ opacity: 0, animation: "fadeUp 1s 0.5s forwards" }}>Whether you're exploring advisory, looking for GTM support, or just want to connect — we'd love to hear from you.</p>
 
           {!formSubmitted ? (
