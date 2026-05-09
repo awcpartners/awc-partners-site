@@ -368,8 +368,8 @@ const AWCv1Updated = () => {
 
         <section ref={(el) => (sectionRefs.current[1] = el)} data-section="services" className={`section-v1 section-animate ${isVisible("services") ? "visible" : ""}`}>
           <div className="section-label">What We Do</div>
-          <h2 className="section-title-v1">Built for founders who think in quarters, not decades.</h2>
-          <p className="section-desc">We don't do everything — we do what matters. Each practice unlocks a specific growth lever for your business.</p>
+          <h2 className="section-title-v1">Built for founders wearing one too many hats</h2>
+          <p className="section-desc">Each practice unlocks a specific growth lever for your business, creating and transforming strategic initiatives into revenue.</p>
           <div className="services-tabs">{services.map((s, i) => (<button key={i} className={`services-tab ${activeTab === i ? "active" : ""}`} onClick={() => setActiveTab(i)}>{s.title}</button>))}</div>
           <div className="service-detail" key={activeTab}>
             <div className="service-info">
@@ -383,7 +383,7 @@ const AWCv1Updated = () => {
         <section ref={(el) => (sectionRefs.current[2] = el)} data-section="experience" className={`section-v1 section-animate ${isVisible("experience") ? "visible" : ""}`}>
           <div className="section-label">Track Record</div>
           <h2 className="section-title-v1">Select engagements across stage and sector.</h2>
-          <p className="section-desc">From Pre-seed AI to Series A+ Enterprise SaaS — we've been in the room where it happens.</p>
+          <p className="section-desc">From Pre-seed AI to Series A+ Enterprise SaaS — we've been in the rooms where it happens.</p>
           <div className="ticker-viewport"><div className="ticker-track">{[...engagements, ...engagements].map((e, i) => (<div key={i} className="ticker-row"><div className="ticker-sector">{e.sector}</div><div className="ticker-type">{e.type}</div><div className="ticker-stage">{e.stage}</div></div>))}</div></div>
         </section>
 
